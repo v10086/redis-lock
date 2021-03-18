@@ -1,0 +1,27 @@
+{
+  "name": "v10086/redis-lock",
+  "type": "library",
+  "description": "Redis分布式锁(Distributed locks)",
+  "keywords": [
+    "php",
+    "phpredis",
+    "redis",
+    "Distributed locks"
+  ],
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "v10086",
+      "email": "1146625863@qq.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "v10086\\": "src/"
+    }
+  },
+  "minimum-stability": "dev"
+}
