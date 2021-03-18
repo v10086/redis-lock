@@ -3,7 +3,7 @@ namespace v10086;
 class RedisLock{
     
     public static $redisHandler=null; //redis操作句柄 默认为空
-    public static $maxPttl=60000;//锁的最大生成时间 默认60秒
+    public static $maxPttl=60000;//锁的最大有效时间 默认60秒
 
 
     //上锁
