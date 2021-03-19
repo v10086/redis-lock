@@ -21,37 +21,16 @@ composer require v10086/redis-lock:v1.0
 ```php
 
 
-namespace v10086;
-class RedisLock{
-    
-    public static $redisHandler=null; //redis操作句柄 默认为空
-    public static $maxPttl=60000;//锁的最大生成时间 默认60秒
-
-
-    //上锁
-    //$key 锁的键名
-    //$pttl 锁的有效时间  粒度为毫秒
-    public static function lock($key,$pttl=null) {
-        if(self::$redisHandler==null){
-            throw new \Exception("请先初始化可用的redis操作句柄");
+        //\v10086\RedisLock::$redisHandler=\v10086\Redis::connection('default'); 设置可用的redis操作句柄
+        //上锁
+        $lock_key='10086';
+        $res = \v10086\RedisLock::lock($lock_key);
+        if($res!=true){
+            //锁被其它事务占用 上锁失败 返回提示
+            return;
         }
-        $res=self::$redisHandler->HSETNX('redLock:'.$key,$key,1);
-        if($res!='1'){
-            return false;
-        }
-        if($pttl!==null){
-           self::$redisHandler->PEXPIRE('redLock:'.$key,$pttl);
-        }else{
-            self::$redisHandler->PEXPIRE('redLock:'.$key, self::$maxPttl);
-        }
-        return true;
-    }
-    
-    //解锁
-    public static function unlock($key){
-        return self::$redisHandler->DEL('redLock:'.$key);
-    }
-}
+        //做点其它事务处理，完成后解锁
+        \v10086\RedisLock::unlock($lock_key);
 
 
 
