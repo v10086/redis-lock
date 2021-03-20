@@ -13,7 +13,7 @@ class RedisLock{
         if(self::$redisHandler==null){
             throw new \Exception("请先初始化可用的redis操作句柄");
         }
-        $res=self::$redisHandler->SETNX('redLock:'.$key,$key,1);
+        $res=self::$redisHandler->SETNX('redLock:'.$key,1);
         if($res!='1'){
             return false;
         }
