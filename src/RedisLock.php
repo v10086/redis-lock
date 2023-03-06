@@ -9,20 +9,11 @@ class RedisLock{
     //上锁
     //$key 锁的键名
     //$pttl 锁的有效时间  粒度为毫秒
-    public static function lock($key,$pttl=null) {
+    public static function lock($key,$ttl=null) {
         if(self::$redisHandler==null){
             throw new \Exception("请先初始化可用的redis操作句柄");
         }
-        $res=self::$redisHandler->SETNX('redLock:'.$key,1);
-        if($res!='1'){
-            return false;
-        }
-        if($pttl!==null){
-           self::$redisHandler->PEXPIRE('redLock:'.$key,$pttl);
-        }else{
-            self::$redisHandler->PEXPIRE('redLock:'.$key, self::$maxPttl);
-        }
-        return true;
+        return self::$redisHandler->SET('redLock:'.$key,1, ['NX', 'PX' => $ttl]);
     }
     
     //解锁
