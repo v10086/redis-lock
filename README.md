@@ -24,13 +24,14 @@ composer require v10086/redis-lock:v1.0
         //\v10086\RedisLock::$redisHandler=\v10086\Redis::connection('default'); 设置可用的redis操作句柄
         //上锁
         $lock_key='10086';
-        $res = \v10086\RedisLock::lock($lock_key);
+        $lock_token=uniqid();
+        $res = \v10086\RedisLock::lock($lock_key,$lock_token);
         if($res!=true){
             //锁被其它事务占用 上锁失败 返回提示
             return;
         }
         //做点其它事务处理，完成后解锁
-        \v10086\RedisLock::unlock($lock_key);
+        \v10086\RedisLock::unlock($lock_key,$lock_token);
 
 
 
